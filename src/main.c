@@ -18,8 +18,11 @@
 #include "em_chip.h"
 #include "em_cmu.h"
 #include "uart.h"
+#include "motor.h"
 #include "em_gpio.h"
 #include "em_usart.h"
+
+#include "bsp.h"
 
 volatile uint32_t msTicks; /* counts 1ms timeTicks */
 
@@ -66,16 +69,40 @@ int main(void)
   if (SysTick_Config(CMU_ClockFreqGet(cmuClock_CORE) / 1000)) while (1) ;
 
   usart_init();
+  motor_init();
 
   usart_enable_rx_isr();
 
   BSP_LedsInit();
+  BSP_LedSet(0);
+  BSP_LedSet(1);
 
   usart_send_string(buffer);
+
   /* Infinite loop */
   while (1) {
-
 	  Delay(1000);
 	  BSP_LedToggle(1);
+
+	  switch(rx_data){
+	    case 'f':
+		  Move_Forward();
+		  break;
+	    case 'b':
+		  Move_Backward();
+		  break;
+	    case 'r':
+		  Move_Left();
+		  break;
+	    case 'l':
+		  Move_Right();
+		  break;
+	    default:
+		  Stop_Robot();
+		  break;
+	  }
+
+	  rx_data = 0;
+
   }
 }

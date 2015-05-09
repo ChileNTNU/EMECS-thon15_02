@@ -17,7 +17,7 @@ volatile uint8_t rx_data;
 #define RX_PIN		1
 
 void usart_init(void) {
-	CMU->HFPERCLKEN0 = (1 << 13) | (1 << 1);        // Enable GPIO, and USART1 peripheral clocks
+	CMU->HFPERCLKEN0 |= (1 << 13) | (1 << 1);        // Enable GPIO, and USART1 peripheral clocks
 
 	GPIO->P[COM_PORT].MODEL = (1 << 4) | (4 << 0);  // Configure PD0 as digital output and PD1 as input
 	GPIO->P[COM_PORT].DOUTSET = (1 << TX_PIN); // Initialize PD0 high since UART TX idles high (otherwise glitches can occur)
