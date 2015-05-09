@@ -109,6 +109,7 @@ int main(void)
 
 	  rx_data = 0;
 
+	  //Chooses the delay depending on the movement
 	  if (delay_type == 1){
 		  Delay(1000);
 	  }else if(delay_type == 2){
