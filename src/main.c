@@ -55,6 +55,7 @@ void Delay(uint32_t dlyTicks)
 int main(void)
 {
   char buffer[] = "AT";
+  uint8_t delay_type = 0;
 
   /* Chip errata */
   CHIP_Init();
@@ -81,28 +82,38 @@ int main(void)
 
   /* Infinite loop */
   while (1) {
-	  Delay(1000);
 	  BSP_LedToggle(1);
 
 	  switch(rx_data){
 	    case 'f':
 		  Move_Forward();
+		  delay_type = 1;
 		  break;
 	    case 'b':
 		  Move_Backward();
+		  delay_type = 1;
 		  break;
 	    case 'r':
 		  Move_Left();
+		  delay_type = 2;
 		  break;
 	    case 'l':
 		  Move_Right();
+		  delay_type = 2;
 		  break;
 	    default:
+	      delay_type = 1;
 		  Stop_Robot();
 		  break;
 	  }
 
 	  rx_data = 0;
+
+	  if (delay_type == 1){
+		  Delay(1000);
+	  }else if(delay_type == 2){
+		  Delay(200);
+	  }
 
   }
 }
